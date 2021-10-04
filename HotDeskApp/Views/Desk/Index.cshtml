@@ -1,0 +1,61 @@
+﻿@model IndexViewModel
+
+<div class="container p-3">
+    <div class="row pt-4">
+        <h2 class="text-primary">Desk list</h2>
+    </div>
+    @if (User.IsInRole("admin"))
+    {
+        <div class="col-6">
+            <a asp-controller="Desk" asp-action="Admin" class="btn btn-primary">Create new desk</a>
+        </div>
+    }
+    </div>
+
+@if (Model.Desks.Count() > 0)
+{
+<form action="handler.php">
+    <table class="table table-bordered table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th>
+                    Desk
+                </th>
+                <th>
+                    Device
+                </th>
+                @if (User.IsInRole("admin"))
+                {
+                    <th>
+                        Change
+                    </th>
+                }
+                </tr>
+        </thead>
+        <tbody>
+            @foreach (var desk in Model.Desks)
+            {
+            <tr>
+                <td width="30%">@desk.Name</td>
+                <td width="30%">
+                    @foreach (var device in Model.Devices)
+                    {
+                        <input name="device" type="radio" value="@device.Name">@device.Name<br />
+                    }
+                    <input type="submit" value="Confirm">
+                </td>
+                @if (User.IsInRole("admin"))
+                {
+                    <td width="30%">
+                        <div class="w-100 btn-group" role="group">
+                            <a asp-controller="Desk" asp-action="UpdateGet" asp-route-Id="@desk.Id" class="btn btn-primary">Update</a>
+                            <a asp-controller="Desk" asp-action="Delete" asp-route-Id="@desk.Id" class="btn btn-danger">Delete</a>
+                        </div>
+                    </td>
+                }
+                </tr>
+            }
+        </tbody>
+    </table>
+</form>
+}
